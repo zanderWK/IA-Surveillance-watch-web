@@ -1,4 +1,6 @@
-<?php renderToasts(); ?>
+<?php 
+require 'src/php/toast.php';
+renderToasts(); ?>
 </body>
 <footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.3.0/video.min.js" integrity="sha512-2uqQaCV1+Xwdhj0ZwOuckUfVRwK+uWl372jXlURTK376U/rt0pg8zwEKYlMhzTg6JsyUciE0ogqEXJ54TDfgOg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
