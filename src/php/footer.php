@@ -1,5 +1,4 @@
 <?php 
-require 'src/php/toast.php';
 renderToasts(); ?>
 </body>
 <footer>

@@ -1,6 +1,7 @@
 
 <?php 
 include 'src/php/header.php';
+require 'src/php/toast.php';
 ?> 
 
 <div class="w-100 vh-100 bg-white bg-main p-5">
