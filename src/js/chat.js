@@ -28,7 +28,7 @@ $(document).ready(function() {
     
         // Initialize a new HLS instance
         initializeHls(stream.url, videoElement, index);
-        showToast("bg-success", "Stream recovered successfully.")
+       
 
     }
     
@@ -48,11 +48,13 @@ $(document).ready(function() {
         });
         hls.on(Hls.Events.ERROR, function(event, data) {
             handleHlsErrors(data, hls, stream, index);
-            showToast("bg-danger", "Stream terminated trying to recover...")
+          
         });
+       
     }
-    
+
 function handleHlsErrors(data, hls, stream, index) {
+    try{
     if (data.fatal) {
         switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
@@ -72,6 +74,10 @@ function handleHlsErrors(data, hls, stream, index) {
                 break;
         }
     }
+}catch(e){
+    resetVideoPlayer(stream, index);
+}
+showToast("bg-danger", "Stream terminated trying to recover...")
 }
 
     
