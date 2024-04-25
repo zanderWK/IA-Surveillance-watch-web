@@ -28,6 +28,8 @@ $(document).ready(function() {
     
         // Initialize a new HLS instance
         initializeHls(stream.url, videoElement, index);
+        showToast("bg-success", "Stream recovered successfully.")
+
     }
     
     function initializeHls(url, videoElement, index) {
@@ -46,6 +48,7 @@ $(document).ready(function() {
         });
         hls.on(Hls.Events.ERROR, function(event, data) {
             handleHlsErrors(data, hls, stream, index);
+            showToast("bg-danger", "Stream terminated trying to recover...")
         });
     }
     
