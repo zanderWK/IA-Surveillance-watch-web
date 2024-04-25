@@ -1,20 +1,50 @@
 
 $(document).ready(function() {
-streams.forEach(function(stream, index) {
-    var video = document.getElementById('video-' + index);
-    if (Hls.isSupported()) {
-        var hls = new Hls({ maxBufferLength: 0.5 });
-        hls.loadSource(stream.url);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            video.play();
-        });
-        hls.on(Hls.Events.ERROR, function(event, data) {
-            handleHlsErrors(data, hls);
-        });
+    streams.forEach(function(stream, index) {
+        var video = document.getElementById('video-' + index);
+        if (Hls.isSupported()) {
+            var hls = new Hls({ maxBufferLength: 1 });
+            hls.loadSource(stream.url);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                // Ensure the video is ready before trying to play
+                if (video.readyState > 2) { // 2 = HAVE_CURRENT_DATA
+                    video.play();
+                } else {
+                    video.onloadeddata = function() {
+                        video.play();
+                    };
+                }
+            });
+            hls.on(Hls.Events.ERROR, function(event, data) {
+                handleHlsErrors(data, hls);
+            });
+        }
+    });
+    
+    function handleHlsErrors(data, hls) {
+        if (data.fatal) {
+            switch(data.type) {
+                case Hls.ErrorTypes.NETWORK_ERROR:
+                    console.error("Network error encountered, trying to recover...");
+                    hls.startLoad();
+                    break;
+                case Hls.ErrorTypes.MEDIA_ERROR:
+                    console.error("Media error encountered, trying to recover...");
+                    if (!hls.recoverMediaError()) {
+                        console.error("Recovering media error failed, trying alternate recovery...");
+                        hls.swapAudioCodec();
+                        hls.recoverMediaError();
+                    }
+                    break;
+                default:
+                    console.error("Unrecoverable error encountered, destroying instance...");
+                    hls.destroy();
+                    break;
+            }
+        }
     }
-});
-
+    
 $('#messageBox').on('keypress', function(event) {
 if (event.which === 13) { // 13 is the Enter key
     event.preventDefault(); // Prevent default submit
@@ -160,23 +190,7 @@ var $messages = $('#messages');
     $messages.scrollTop($messages.prop("scrollHeight"));
 }
 
-function handleHlsErrors(data, hls) {
-if (data.fatal) {
-    switch(data.type) {
-        case Hls.ErrorTypes.NETWORK_ERROR:
-            console.error("Network error encountered, trying to recover...");
-            hls.startLoad();
-            break;
-        case Hls.ErrorTypes.MEDIA_ERROR:
-            console.error("Media error encountered, trying to recover...");
-            hls.recoverMediaError();
-            break;
-        default:
-            hls.destroy();
-            break;
-    }
-}
-}
+
 
 $(".spinner").addClass("d-none");
 
