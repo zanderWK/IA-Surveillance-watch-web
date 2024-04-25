@@ -1,50 +1,78 @@
 
 $(document).ready(function() {
+
     streams.forEach(function(stream, index) {
-        var video = document.getElementById('video-' + index);
+        var videoId = 'video-' + index;
+        var videoElement = document.getElementById(videoId);
         if (Hls.isSupported()) {
-            var hls = new Hls({ maxBufferLength: 1 });
-            hls.loadSource(stream.url);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                // Ensure the video is ready before trying to play
-                if (video.readyState > 2) { // 2 = HAVE_CURRENT_DATA
-                    video.play();
-                } else {
-                    video.onloadeddata = function() {
-                        video.play();
-                    };
-                }
-            });
-            hls.on(Hls.Events.ERROR, function(event, data) {
-                handleHlsErrors(data, hls);
-            });
+            initializeHls(stream.url, videoElement, index);
         }
     });
+
     
-    function handleHlsErrors(data, hls) {
-        if (data.fatal) {
-            switch(data.type) {
-                case Hls.ErrorTypes.NETWORK_ERROR:
-                    console.error("Network error encountered, trying to recover...");
-                    hls.startLoad();
-                    break;
-                case Hls.ErrorTypes.MEDIA_ERROR:
-                    console.error("Media error encountered, trying to recover...");
-                    if (!hls.recoverMediaError()) {
-                        console.error("Recovering media error failed, trying alternate recovery...");
-                        hls.swapAudioCodec();
-                        hls.recoverMediaError();
-                    }
-                    break;
-                default:
-                    console.error("Unrecoverable error encountered, destroying instance...");
-                    hls.destroy();
-                    break;
-            }
+
+    function resetVideoPlayer(stream, index) {
+        var videoId = 'video-' + index;
+        var container = document.getElementById(videoId);
+    
+        // Check if there's an existing HLS instance and destroy it
+        if (window[`hlsInstance${index}`]) {
+            window[`hlsInstance${index}`].destroy();
         }
+    
+        // Clear the existing video element and recreate it
+        container.innerHTML = '';
+        var videoElement = document.createElement('video');
+        videoElement.id = videoId;
+        container.appendChild(videoElement);
+    
+        // Initialize a new HLS instance
+        initializeHls(stream.url, videoElement, index);
     }
     
+    function initializeHls(url, videoElement, index) {
+        var hls = new Hls({ maxBufferLength: 2 });
+        window[`hlsInstance${index}`] = hls; // Storing HLS instance to window for potential cleanup
+        hls.loadSource(url);
+        hls.attachMedia(videoElement);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            if (videoElement.readyState > 2) { // 2 = HAVE_CURRENT_DATA
+                videoElement.play();
+            } else {
+                videoElement.onloadeddata = function() {
+                    videoElement.play();
+                };
+            }
+        });
+        hls.on(Hls.Events.ERROR, function(event, data) {
+            handleHlsErrors(data, hls, stream, index);
+        });
+    }
+    
+function handleHlsErrors(data, hls, stream, index) {
+    if (data.fatal) {
+        switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+                // Silently try to recover from network error
+                hls.startLoad();
+                break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+                // Silently try to recover from media error
+                if (!hls.recoverMediaError()) {
+                    hls.swapAudioCodec();
+                    hls.recoverMediaError();
+                }
+                break;
+            default:
+                // If unrecoverable, reset the player silently
+                resetVideoPlayer(stream, index);
+                break;
+        }
+    }
+}
+
+    
+
 $('#messageBox').on('keypress', function(event) {
 if (event.which === 13) { // 13 is the Enter key
     event.preventDefault(); // Prevent default submit
