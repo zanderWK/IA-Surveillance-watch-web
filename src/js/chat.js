@@ -235,4 +235,10 @@ var $messages = $('#messages');
 
 $(".spinner").addClass("d-none");
 
+window.onerror = function (message, source, lineno, colno, error) {
+    console.log("Error message: " + message);
+
+    // Return `true` to prevent the default browser error message from being displayed
+    return true;
+};
 });
