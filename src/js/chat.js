@@ -184,7 +184,7 @@ function fetchLatestMessage(sessionId) {
         data: { session: sessionId },
         success: function(response) {
             response = JSON.parse(response);
-            displayMessage(response.body.messages);
+            displayMessage(response.body.messages.pop());
             let newValue = 1;
             let oldvalue = parseInt($('#messageCount').text());
             setMessageCount(newValue,oldvalue);
@@ -235,10 +235,12 @@ var $messages = $('#messages');
 
 $(".spinner").addClass("d-none");
 
+});
+
+
 window.onerror = function (message, source, lineno, colno, error) {
-    console.log("Error message: " + message);
+    console.log("Error message: " + message, "Error source: " + source, "Error line number: " + lineno, "Error column number: " + colno, "Error: " + error);
 
     // Return `true` to prevent the default browser error message from being displayed
     return true;
 };
-});
