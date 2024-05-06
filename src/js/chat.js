@@ -241,10 +241,15 @@ $(".spinner").addClass("d-none");
 
 
 window.onerror = function (message, source, lineno, colno, error) {
+    console.log(message)
    if(message.includes("properties of undefined (reading 'end')")){
     if(!errorFlag){
         errorFlag = true;
         showToast("bg-danger", "Stream terminated trying to recover...")
+        showToast("bg-success", "Refreshing...")
+        setTimeout(function(){
+            window.location.reload();
+        }, 5000);
     }
     streams.forEach(function(stream, index) {
         var videoId = 'video-' + index;
