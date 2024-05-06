@@ -125,7 +125,6 @@ $('#mobileChatButton').on('click', function() {
 
  // Register socket event handlers
  socket.on('connect', function() {
-    console.log("Connected to Socket.IO server");
     socket.emit('joinProjectRoom', { 'sessionId': sessionId });
     fetchAllMessages(sessionId);
 
@@ -167,7 +166,7 @@ function fetchAllMessages(sessionId) {
         data: { session: sessionId },
         success: function(response) {
             response = JSON.parse(response);
-            console.log(response.body.messages.slice(0, -1));
+         
             displayMessages(response.body.messages.slice(0, -1));
             let newValue = response.body.messages.length;
             setMessageCount(newValue,"0");
@@ -241,7 +240,7 @@ $(".spinner").addClass("d-none");
 
 
 window.onerror = function (message, source, lineno, colno, error) {
-    console.log(message)
+
    if(message.includes("properties of undefined (reading 'end')")){
     if(!errorFlag){
         errorFlag = true;
@@ -262,7 +261,7 @@ window.onerror = function (message, source, lineno, colno, error) {
 
     checkAllVideoPlayers();
    }
-
+   console.clear();
     // Return `true` to prevent the default browser error message from being displayed
     return true;
 };
@@ -279,9 +278,6 @@ function checkAllVideoPlayers() {
             // Check if the player is playing (not paused)
             const isPlaying = !player.paused();
             playerStates.push({ playerId, isPlaying });
-
-            // Log the playing state
-            console.log(`Player ID: ${playerId} is ${isPlaying ? 'playing' : 'paused'}`);
         }
     }
 
