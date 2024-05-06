@@ -237,7 +237,7 @@ var $messages = $('#messages');
 
 $(".spinner").addClass("d-none");
 
-});
+
 
 
 window.onerror = function (message, source, lineno, colno, error) {
@@ -282,3 +282,5 @@ function checkAllVideoPlayers() {
 
     return playerStates; // Optional: return the states if needed elsewhere
 }
+
+});
