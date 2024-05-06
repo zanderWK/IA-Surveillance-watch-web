@@ -167,8 +167,8 @@ function fetchAllMessages(sessionId) {
         data: { session: sessionId },
         success: function(response) {
             response = JSON.parse(response);
-            console.log(response.body.messages.pop());
-            displayMessages(response.body.messages);
+            console.log(response.body.messages.slice(0, -1));
+            displayMessages(response.body.messages.slice(0, -1));
             let newValue = response.body.messages.length;
             setMessageCount(newValue,"0");
         },
