@@ -1,6 +1,6 @@
 
 $(document).ready(function() {
-    let errorFlag = false;
+   
     streams.forEach(function(stream, index) {
         var videoId = 'video-' + index;
         var videoElement = document.getElementById(videoId);
@@ -9,7 +9,7 @@ $(document).ready(function() {
         }
     });
 
-    
+      errorFlag = false;
 
     function resetVideoPlayer(stream, index) {
         var videoId = 'video-' + index;
