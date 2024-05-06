@@ -33,6 +33,7 @@ $(document).ready(function() {
     }
     
     function initializeHls(url, videoElement, index) {
+        try{
         var hls = new Hls({ maxBufferLength: 2 });
         window[`hlsInstance${index}`] = hls; // Storing HLS instance to window for potential cleanup
         hls.loadSource(url);
@@ -50,6 +51,9 @@ $(document).ready(function() {
             handleHlsErrors(data, hls, stream, index);
           
         });
+    }catch(e){
+        handleHlsErrors(data, hls, stream, index);
+    }
        
     }
 
@@ -82,7 +86,7 @@ showToast("bg-danger", "Stream terminated trying to recover...")
 
     
 
-$('#messageBox').on('keypress', function(event) {
+$('#messageBox').on('keypress', function(event) { 
 if (event.which === 13) { // 13 is the Enter key
     event.preventDefault(); // Prevent default submit
     // Optional: Add any checks or processing before the form submission
