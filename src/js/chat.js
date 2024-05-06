@@ -1,6 +1,6 @@
 
 $(document).ready(function() {
-
+    let errorFlag = false;
     streams.forEach(function(stream, index) {
         var videoId = 'video-' + index;
         var videoElement = document.getElementById(videoId);
@@ -241,8 +241,44 @@ $(".spinner").addClass("d-none");
 
 
 window.onerror = function (message, source, lineno, colno, error) {
-    console.log("Error message: " + message, "Error source: " + source, "Error line number: " + lineno, "Error column number: " + colno, "Error: " + error);
+   if(message.includes("properties of undefined (reading 'end')")){
+    if(!errorFlag){
+        errorFlag = true;
+        showToast("bg-danger", "Stream terminated trying to recover...")
+    }
+    streams.forEach(function(stream, index) {
+        var videoId = 'video-' + index;
+        var videoElement = document.getElementById(videoId);
+        if (Hls.isSupported()) {
+            initializeHls(stream.url, videoElement, index);
+            
+        }
+    });
+
+    checkAllVideoPlayers();
+   }
 
     // Return `true` to prevent the default browser error message from being displayed
     return true;
 };
+
+// Function to check all Video.js players on the page
+function checkAllVideoPlayers() {
+    const allPlayers = videojs.players; // Get all players
+    const playerStates = [];
+
+    // Iterate through each player
+    for (let playerId in allPlayers) {
+        if (allPlayers.hasOwnProperty(playerId)) {
+            const player = allPlayers[playerId];
+            // Check if the player is playing (not paused)
+            const isPlaying = !player.paused();
+            playerStates.push({ playerId, isPlaying });
+
+            // Log the playing state
+            console.log(`Player ID: ${playerId} is ${isPlaying ? 'playing' : 'paused'}`);
+        }
+    }
+
+    return playerStates; // Optional: return the states if needed elsewhere
+}
