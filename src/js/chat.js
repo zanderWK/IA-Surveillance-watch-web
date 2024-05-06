@@ -167,7 +167,8 @@ function fetchAllMessages(sessionId) {
         data: { session: sessionId },
         success: function(response) {
             response = JSON.parse(response);
-            displayMessages(response.body.messages);
+            console.log(response.body.messages);
+            displayMessages(response.body.messages.pop());
             let newValue = response.body.messages.length;
             setMessageCount(newValue,"0");
         },
@@ -184,7 +185,7 @@ function fetchLatestMessage(sessionId) {
         data: { session: sessionId },
         success: function(response) {
             response = JSON.parse(response);
-            console.log(response.body.messages);
+           
             displayMessage(response.body.messages);
             let newValue = 1;
             let oldvalue = parseInt($('#messageCount').text());
