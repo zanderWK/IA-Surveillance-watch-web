@@ -1,6 +1,6 @@
 
 $(document).ready(function() {
-   
+   try{
     streams.forEach(function(stream, index) {
         var videoId = 'video-' + index;
         var videoElement = document.getElementById(videoId);
@@ -8,32 +8,13 @@ $(document).ready(function() {
             initializeHls(stream.url, videoElement, index);
         }
     });
+   }catch(e){
+    throw new Error(e);
+   }
 
-      errorFlag = false;
-
-    function resetVideoPlayer(stream, index) {
-        var videoId = 'video-' + index;
-        var container = document.getElementById(videoId);
-    
-        // Check if there's an existing HLS instance and destroy it
-        if (window[`hlsInstance${index}`]) {
-            window[`hlsInstance${index}`].destroy();
-        }
-    
-        // Clear the existing video element and recreate it
-        container.innerHTML = '';
-        var videoElement = document.createElement('video');
-        videoElement.id = videoId;
-        container.appendChild(videoElement);
-    
-        // Initialize a new HLS instance
-        initializeHls(stream.url, videoElement, index);
-       
-
-    }
     
     function initializeHls(url, videoElement, index) {
-        try{
+
         var hls = new Hls({ maxBufferLength: 5 });
         window[`hlsInstance${index}`] = hls; // Storing HLS instance to window for potential cleanup
         hls.loadSource(url);
@@ -51,38 +32,11 @@ $(document).ready(function() {
             handleHlsErrors(data, hls, stream, index);
           
         });
-    }catch(e){
-        handleHlsErrors(data, hls, stream, index);
-    }
+
        
     }
 
-function handleHlsErrors(data, hls, stream, index) {
-    try{
-    if (data.fatal) {
-        switch (data.type) {
-            case Hls.ErrorTypes.NETWORK_ERROR:
-                // Silently try to recover from network error
-                hls.startLoad();
-                break;
-            case Hls.ErrorTypes.MEDIA_ERROR:
-                // Silently try to recover from media error
-                if (!hls.recoverMediaError()) {
-                    hls.swapAudioCodec();
-                    hls.recoverMediaError();
-                }
-                break;
-            default:
-                // If unrecoverable, reset the player silently
-                resetVideoPlayer(stream, index);
-                break;
-        }
-    }
-}catch(e){
-    resetVideoPlayer(stream, index);
-}
-showToast("bg-danger", "Stream terminated trying to recover...")
-}
+
 
     
 
@@ -239,10 +193,14 @@ $(".spinner").addClass("d-none");
 
 
 });
+errorFlag = false;
+
 
 window.addEventListener('error', function(e) {
-conmsole.log(e.filename)
+console.log(e.filename)
 });
+
+
 window.onerror = function (message, source, lineno, colno, error) {
 console.log(message)
    if(source.includes("video.min.js") || source.includes("hls.min.js")){
