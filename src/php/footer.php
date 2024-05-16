@@ -2,7 +2,7 @@
 renderToasts(); ?>
 </body>
 <footer>
-<script>window.onerror = function(e){throw new Error(e);}</script>
+<script>window.onerror = function(e){console.log(e);}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.3.0/video.min.js" integrity="sha512-2uqQaCV1+Xwdhj0ZwOuckUfVRwK+uWl372jXlURTK376U/rt0pg8zwEKYlMhzTg6JsyUciE0ogqEXJ54TDfgOg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="//cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="src/libraries/jquery/jquery-3.7.1.min.js"></script>
