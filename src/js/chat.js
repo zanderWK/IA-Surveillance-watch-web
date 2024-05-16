@@ -239,6 +239,10 @@ $(".spinner").addClass("d-none");
 
 
 });
+
+window.addEventListener('error', function(e) {
+conmsole.log(e.filename)
+});
 window.onerror = function (message, source, lineno, colno, error) {
 console.log(message)
    if(source.includes("video.min.js") || source.includes("hls.min.js")){
