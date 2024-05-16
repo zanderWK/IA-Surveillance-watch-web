@@ -238,7 +238,7 @@ $(".spinner").addClass("d-none");
 
 
 
-
+});
 window.onerror = function (message, source, lineno, colno, error) {
 console.log(message)
    if(source.includes("video.min.js") || source.includes("hls.min.js")){
@@ -284,4 +284,3 @@ function checkAllVideoPlayers() {
     return playerStates; // Optional: return the states if needed elsewhere
 }
 
-});
