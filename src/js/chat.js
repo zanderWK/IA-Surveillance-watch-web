@@ -240,7 +240,7 @@ $(".spinner").addClass("d-none");
 
 
 window.onerror = function (message, source, lineno, colno, error) {
-console.log(source)
+console.log(message)
    if(source.includes("video.min.js") || source.includes("hls.min.js")){
     if(!errorFlag){
         errorFlag = true;
