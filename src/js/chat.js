@@ -241,7 +241,7 @@ $(".spinner").addClass("d-none");
 
 window.onerror = function (message, source, lineno, colno, error) {
 console.log(source)
-   if(message.includes("video.min.js")){
+   if(source.includes("video.min.js") || source.includes("hls.min.js")){
     if(!errorFlag){
         errorFlag = true;
         showToast("bg-danger", "Stream terminated trying to recover...")
