@@ -74,13 +74,9 @@ $(document).ready(function() {
         const error = e.target.error;
         console.error('Video.js error:', error);
 
-        if (error && (error.code === 3 || error.code === 4)) {
-            // Specific error codes to handle:
-            // 3: MEDIA_ERR_DECODE
-            // 4: MEDIA_ERR_SRC_NOT_SUPPORTED
-            console.error('Critical error, restarting stream...');
-            restartStream(stream, index);
-        }
+        // Reinitialize stream on any error
+        console.error('Error detected, restarting stream...');
+        restartStream(stream, index);
     }
 
     /**
