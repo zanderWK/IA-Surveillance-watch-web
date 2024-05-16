@@ -4,8 +4,10 @@ $(document).ready(function() {
         streams.forEach(function(stream, index) {
             var videoId = 'video-' + index;
             var videoElement = document.getElementById(videoId);
-            if (Hls.isSupported()) {
+            if (videoElement && Hls.isSupported()) {
                 initializeHls(stream.url, videoElement, index);
+            } else {
+                console.error(`Video element with ID ${videoId} not found or HLS not supported.`);
             }
         });
     } catch (e) {
@@ -88,10 +90,10 @@ $(document).ready(function() {
         var videoId = 'video-' + index;
         var videoElement = document.getElementById(videoId);
 
-        if (Hls.isSupported()) {
+        if (videoElement && Hls.isSupported()) {
             initializeHls(stream.url, videoElement, index);
         } else {
-            console.error('HLS not supported, cannot restart stream.');
+            console.error(`Video element with ID ${videoId} not found or HLS not supported.`);
         }
     }
 
@@ -285,8 +287,10 @@ $(document).ready(function() {
             streams.forEach(function(stream, index) {
                 var videoId = 'video-' + index;
                 var videoElement = document.getElementById(videoId);
-                if (Hls.isSupported()) {
+                if (videoElement && Hls.isSupported()) {
                     initializeHls(stream.url, videoElement, index);
+                } else {
+                    console.error(`Video element with ID ${videoId} not found or HLS not supported.`);
                 }
             });
             checkAllVideoPlayers();
