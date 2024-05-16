@@ -115,8 +115,11 @@ if($streamLength == 0){
     </div>
     <script>
   window.addEventListener('error', function(e) {
-   alert(e.message);
-   console.error(e.message, e.filename, e.lineno, e.colno, e.error);
+   if(e.message.contains("Cannot read properties of undefined (reading 'end')")){
+   setTimeout(() => {
+    window.reload();
+   }, 5000);
+   }
   });
 </script>
 <?php
