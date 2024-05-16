@@ -241,7 +241,7 @@ $(".spinner").addClass("d-none");
 
 window.onerror = function (message, source, lineno, colno, error) {
 
-   if(message.includes("properties of undefined (reading 'end')")){
+
     if(!errorFlag){
         errorFlag = true;
         showToast("bg-danger", "Stream terminated trying to recover...")
@@ -260,7 +260,7 @@ window.onerror = function (message, source, lineno, colno, error) {
     });
 
     checkAllVideoPlayers();
-   }
+  
    console.clear();
     // Return `true` to prevent the default browser error message from being displayed
     return true;
