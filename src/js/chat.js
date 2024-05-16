@@ -9,7 +9,7 @@ $(document).ready(function() {
             }
         });
     } catch (e) {
-        throw new Error(e);
+        console.error('Error initializing streams:', e);
     }
 
     /**
@@ -33,6 +33,11 @@ $(document).ready(function() {
 
         hls.on(Hls.Events.ERROR, function(event, data) {
             handleHlsErrors(data, hls, stream, index);
+        });
+
+        // Add error handling for Video.js
+        videoElement.addEventListener('error', function(e) {
+            handleVideoJsErrors(e, stream, index);
         });
     }
 
@@ -61,8 +66,36 @@ $(document).ready(function() {
     }
 
     /**
-     * Move chat container based on window width.
+     * Handle Video.js errors and restart stream if necessary.
      */
+    function handleVideoJsErrors(e, stream, index) {
+        const error = e.target.error;
+        console.error('Video.js error:', error);
+
+        if (error && (error.code === 3 || error.code === 4)) {
+            // Specific error codes to handle:
+            // 3: MEDIA_ERR_DECODE
+            // 4: MEDIA_ERR_SRC_NOT_SUPPORTED
+            console.error('Critical error, restarting stream...');
+            restartStream(stream, index);
+        }
+    }
+
+    /**
+     * Restart the stream for a given index.
+     */
+    function restartStream(stream, index) {
+        var videoId = 'video-' + index;
+        var videoElement = document.getElementById(videoId);
+
+        if (Hls.isSupported()) {
+            initializeHls(stream.url, videoElement, index);
+        } else {
+            console.error('HLS not supported, cannot restart stream.');
+        }
+    }
+
+    // Move chat container based on window width
     function moveChat() {
         var $chatContainer = $('#messageDiv');
         if ($(window).width() >= 768) { // Bootstrap's MD breakpoint
