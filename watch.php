@@ -113,6 +113,12 @@ if($streamLength == 0){
             <div class="modal-body" id="mobile-chat-holder"></div>
         </div>
     </div>
+    <script>
+  window.addEventListener('error', function(e) {
+   alert(e.message);
+   console.error(e.message, e.filename, e.lineno, e.colno, e.error);
+  });
+</script>
 <?php
 include 'src/php/footer.php';
 ?>
