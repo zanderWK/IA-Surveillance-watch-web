@@ -34,7 +34,7 @@ $(document).ready(function() {
     
     function initializeHls(url, videoElement, index) {
         try{
-        var hls = new Hls({ maxBufferLength: 2 });
+        var hls = new Hls({ maxBufferLength: 5 });
         window[`hlsInstance${index}`] = hls; // Storing HLS instance to window for potential cleanup
         hls.loadSource(url);
         hls.attachMedia(videoElement);
@@ -240,8 +240,8 @@ $(".spinner").addClass("d-none");
 
 
 window.onerror = function (message, source, lineno, colno, error) {
-
-
+console.log(source)
+   if(message.includes("video.min.js")){
     if(!errorFlag){
         errorFlag = true;
         showToast("bg-danger", "Stream terminated trying to recover...")
@@ -260,7 +260,7 @@ window.onerror = function (message, source, lineno, colno, error) {
     });
 
     checkAllVideoPlayers();
-  
+}
    console.clear();
     // Return `true` to prevent the default browser error message from being displayed
     return true;
