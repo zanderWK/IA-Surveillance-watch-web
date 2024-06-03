@@ -18,8 +18,8 @@ $(document).ready(function() {
      * Initialize HLS for a given video element and stream URL.
      */
     function initializeHls(url, videoElement, index) {
-        var hls = new Hls({ maxBufferLength: 5 });
-        window[`hlsInstance${index}`] = hls; // Store HLS instance for potential cleanup
+        var hls = new Hls({ maxBufferLength: 30 });
+        window[`hlsInstance${index}`] = hls; // Store HLS instance in window object
         hls.loadSource(url);
         hls.attachMedia(videoElement);
 
@@ -59,9 +59,8 @@ $(document).ready(function() {
                     hls.recoverMediaError();
                     break;
                 default:
-                    console.error('Unrecoverable error, destroying HLS instance...');
-                    hls.destroy();
-                    initializeHls(stream.url, document.getElementById('video-' + index), index);
+                    console.error('Unrecoverable error, restarting stream...');
+                    restartStream(stream, index);
                     break;
             }
         }
@@ -310,6 +309,6 @@ $(document).ready(function() {
             }
         }
 
-        return playerStates; // Optional: return the states if needed elsewhere
+        return playerStates; 
     }
 });
