@@ -59,8 +59,9 @@ $(document).ready(function() {
                     hls.recoverMediaError();
                     break;
                 default:
-                    console.error('Unrecoverable error, restarting stream...');
-                    restartStream(stream, index);
+                    console.error('Unrecoverable error, destroying HLS instance...');
+                    hls.destroy();
+                    initializeHls(stream.url, document.getElementById('video-' + index), index);
                     break;
             }
         }
@@ -309,6 +310,6 @@ $(document).ready(function() {
             }
         }
 
-        return playerStates; 
+        return playerStates; // Optional: return the states if needed elsewhere
     }
 });
