@@ -24,7 +24,7 @@ $(document).ready(function() {
         hls.attachMedia(videoElement);
 
         hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            if (videoElement.readyState > 2) { // 2 = HAVE_CURRENT_DATA
+            if (videoElement.readyState > 4) { // 2 = HAVE_CURRENT_DATA
                 videoElement.play();
             } else {
                 videoElement.onloadeddata = function() {
