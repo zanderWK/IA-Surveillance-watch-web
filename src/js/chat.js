@@ -36,6 +36,12 @@ $(document).ready(function() {
         hls.on(Hls.Events.ERROR, function(event, data) {
             handleHlsErrors(data, hls, stream, index);
         });
+        // Initialize Video.js with the loading spinner disabled
+        videojs(videoElement, {
+            loadingSpinner: false,
+            autoplay: true,
+            preload: 'auto'
+        });
 
         // Add error handling for Video.js
         videoElement.addEventListener('error', function(e) {
