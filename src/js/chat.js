@@ -47,8 +47,7 @@ $(document).ready(function() {
      * Handle HLS errors and try to recover stream.
      */
     function handleHlsErrors(data, hls, stream, index) {
-        console.error('HLS error:', data);
-        if (data.fatal) {
+   
             switch (data.type) {
                 case Hls.ErrorTypes.NETWORK_ERROR:
                     console.error('Network error, trying to recover...');
@@ -63,7 +62,7 @@ $(document).ready(function() {
                     restartStream(stream, index);
                     break;
             }
-        }
+        
     }
 
     /**
@@ -269,8 +268,7 @@ $(document).ready(function() {
     });
 
     window.onerror = function(message, source, lineno, colno, error) {
-        console.log(message);
-        if (source.includes("video.min.js") || source.includes("hls.min.js")) {
+      
             if (!errorFlag) {
                 errorFlag = true;
                 showToast("bg-danger", "Stream terminated, trying to recover...");
@@ -289,7 +287,7 @@ $(document).ready(function() {
                 }
             });
             checkAllVideoPlayers();
-        }
+        
         console.clear();
         return true; // Prevent the default browser error message
     };
