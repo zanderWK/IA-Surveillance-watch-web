@@ -18,7 +18,7 @@ $(document).ready(function() {
      * Initialize HLS for a given video element and stream URL.
      */
     function initializeHls(url, videoElement, index) {
-        var hls = new Hls({ maxBufferLength: 15 });
+        var hls = new Hls({ maxBufferLength: 120 });
         window[`hlsInstance${index}`] = hls; // Store HLS instance in window object
         hls.loadSource(url);
         hls.attachMedia(videoElement);
